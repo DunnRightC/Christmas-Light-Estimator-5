@@ -3,104 +3,97 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dunn Right Creations — Christmas Light Estimator (V10.6a)</title>
-<meta name="description" content="Instant Christmas light estimate by Dunn Right Creations (DFW). Priced per foot with 12-inch spacing.">
+<title>Dunn Right Creations — Christmas Light Estimator (V10.6c)</title>
+<meta name="description" content="Instant Christmas light estimate by Dunn Right Creations (DFW).">
 <style>
   :root{
-    --bg:#0b1220; --card:#121a2b; --muted:#9fb0d1; --text:#e9f0ff; --accent:#4da3ff; --accent2:#53e0a4;
-    --border:#22304d; --gold:#ffd55e; --xmas-red:#d24b4b; --xmas-green:#2fb86f; --badge:#2b3b5e;
-    --tooltip:#0f1a33; --tooltip-border:#2a3b62;
+    --bg:#1a2336;
+    --card:#202c45;
+    --muted:#b7c6e9;
+    --text:#f3f7ff;
+    --accent:#63b3ff;
+    --accent2:#55f0aa;
+    --border:#2f4163;
+    --gold:#ffd972;
+    --xmas-red:#f15555;
+    --xmas-green:#35d37a;
+    --sparkle:#ffffffaa;
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;min-height:100%}
-  a{color:var(--accent)}
-  header{max-width:1100px;margin:0 auto;padding:20px 16px 0;text-align:left;position:relative}
+  html,body{
+    margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Helvetica,Arial,sans-serif;min-height:100%;
+  }
+
+  /* subtle sparkles across the page */
+  body::before, body::after {
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(var(--sparkle) 1px, transparent 1.5px) 0 0/ 26px 26px,
+      radial-gradient(#ffffff88 1px, transparent 1.5px) 13px 13px/ 26px 26px;
+    opacity:.18; animation:sparkleA 26s linear infinite;
+  }
+  body::after{
+    background:
+      radial-gradient(#ffffffaa 1.2px, transparent 1.6px) 0 0/ 34px 34px,
+      radial-gradient(#ffffff66 1.2px, transparent 1.6px) 17px 17px/ 34px 34px;
+    opacity:.12; animation:sparkleB 34s linear infinite reverse;
+  }
+  @keyframes sparkleA { to { transform: translateY(60px); filter:hue-rotate(8deg);} }
+  @keyframes sparkleB { to { transform: translateY(-80px); filter:hue-rotate(-8deg);} }
+
+  header{max-width:1100px;margin:0 auto;padding:20px 16px 0;position:relative;z-index:1}
   .brand{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-  .brand h1{margin:0;font-size:clamp(18px,3vw,24px)}
+  .brand h1{margin:0;font-size:clamp(18px,3vw,24px);color:var(--accent2)}
   .tag{font-size:12px;color:var(--muted)}
   .slogan{color:var(--gold);font-size:13px;margin-top:4px}
   .lights{
     width:100%;height:20px;margin-top:10px;
     background: radial-gradient(circle at 10px 10px, var(--xmas-red) 0 4px, transparent 5px),
                 radial-gradient(circle at 40px 10px, var(--xmas-green) 0 4px, transparent 5px),
-                radial-gradient(circle at 70px 10px, #4da3ff 0 4px, transparent 5px);
-    background-size:90px 20px;background-repeat:repeat-x;opacity:.9;
-    filter:drop-shadow(0 0 6px rgba(255,255,255,.15));border-bottom:1px solid var(--border);
+                radial-gradient(circle at 70px 10px, var(--accent) 0 4px, transparent 5px);
+    background-size:90px 20px;background-repeat:repeat-x;opacity:.95;
+    filter:drop-shadow(0 0 10px rgba(255,255,255,.35));border-bottom:1px solid var(--border);
   }
-  body::before, body::after{
-    content:"";position:fixed;left:0;right:0;top:0;bottom:0;pointer-events:none;opacity:.18;
-    background-image:radial-gradient(#fff 1px, transparent 1px), radial-gradient(#fff 1px, transparent 1px);
-    background-size: 3px 3px, 2px 2px; background-position:0 0, 25px 25px; animation:snow 18s linear infinite;
-  }
-  body::after{opacity:.10;animation-duration:28s}
-  @keyframes snow{to{background-position:0 1000px,25px 1025px}}
-  .wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:1fr;gap:16px}
+
+  .wrap{max-width:1100px;margin:0 auto;padding:16px;display:grid;grid-template-columns:1fr;gap:16px;position:relative;z-index:1}
   @media(min-width:980px){.wrap{grid-template-columns:560px 1fr}}
   .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px}
-  h2{margin:0 0 10px 0;font-size:clamp(18px,3.2vw,22px)}
-  h3{margin:14px 0 8px 0;font-size:16px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-  label{display:block;font-size:14px;margin:10px 0 6px;color:#cfe0ff}
-  input,select,button,textarea{
-    width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:#0e1627;color:#e9f0ff;font-size:14px;outline:none;
+  h2{margin:0 0 10px;font-size:clamp(18px,3.2vw,22px);color:var(--accent2)}
+  h3{margin:14px 0 8px;font-size:16px;color:var(--gold);text-transform:uppercase;letter-spacing:.08em}
+  label{display:block;font-size:14px;margin:10px 0 6px;color:#dfe9ff}
+  input,select,textarea{
+    width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);
+    background:#243254;color:#f3f7ff;font-size:14px;
   }
   textarea{min-height:110px;resize:vertical}
-  input[type="number"]{appearance:textfield}
-  input::placeholder,textarea::placeholder{color:#9ab0d4}
+  .req-star{color:#ff4d4d;font-weight:700;margin-left:4px}
   .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .notice{background:#332600;border:1px solid #a3892f;color:var(--gold);border-radius:10px;padding:10px;font-size:13px;margin-bottom:10px}
   .muted{color:var(--muted);font-size:12px}
-  .total{font-size:28px;font-weight:700}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 14px;border-radius:12px;border:1px solid var(--border);cursor:pointer;transition:transform .03s ease}
+
+  /* Buttons with glow hover */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 16px;border-radius:12px;border:1px solid var(--border);cursor:pointer;transition:transform .06s ease, box-shadow .15s ease, filter .15s ease}
   .btn:active{transform:translateY(1px)}
-  .btn-primary{background:var(--xmas-green);color:#072214;border-color:transparent;font-weight:700}
+  .btn-primary{background:var(--xmas-green);color:#062916;font-weight:800;box-shadow:0 0 0 rgba(0,0,0,0)}
+  .btn-primary:hover{filter:brightness(1.08); box-shadow:0 8px 22px rgba(53,211,122,.35), 0 0 0 3px rgba(53,211,122,.18)}
   .btn-outline{background:transparent;color:var(--text)}
   .btn-success{background:var(--xmas-red);color:#2b0707;border-color:transparent;font-weight:700}
-  .grid{display:grid;gap:10px}
-  .line{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed var(--border);align-items:baseline}
-  .line b{font-weight:600}
-  .line small{color:var(--muted)}
-  .badge{display:inline-block;background:var(--badge);border:1px solid var(--border);padding:2px 8px;border-radius:999px;font-size:11px;margin-left:8px;white-space:nowrap}
-  .divider{height:1px;background:var(--border);margin:10px 0}
-  .footer-note{font-size:12px;color:var(--muted)}
+
   .right-sticky{position:sticky;top:12px;height:fit-content}
-  .alert{background:#18102a;border:1px solid #3d2a72;padding:10px;border-radius:10px;color:#d8caff;font-size:13px}
-  .kv{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}
-  .copyright{color:var(--muted);font-size:12px;text-align:center;margin-top:8px}
-  .thumbs{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
-  .thumbs img{width:92px;height:92px;object-fit:cover;border-radius:10px;border:1px solid var(--border)}
-  .notice{background:#3b2b00;border:1px solid #705300;color:var(--gold);border-radius:10px;padding:10px;font-size:12.5px}
-  .tiny{font-size:11px;color:#cbd8f5}
-  .req-star{color:#ff4d4d;margin-left:6px;font-weight:700}
-  .tiny-note{font-size:12px;color:#cbd8f5;margin-top:6px}
-  .inline-switch{display:flex;align-items:center;gap:10px}
-  .rate-preview{margin-top:6px;font-size:12.5px;color:#cfe0ff}
-  /* Tooltip */
-  .tip{display:inline-flex;align-items:center;gap:6px}
-  .tip .icon{
-    width:18px;height:18px;border-radius:50%;border:1px solid var(--tooltip-border);
-    display:inline-flex;align-items:center;justify-content:center;font-size:12px;color:#d7e2ff;background:#10203f;cursor:help;
-  }
-  .tip .bubble{
-    position:absolute;z-index:5;transform:translateY(6px);
-    background:var(--tooltip);color:#dfe8ff;border:1px solid var(--tooltip-border);
-    padding:10px 12px;border-radius:10px;max-width:520px;line-height:1.35;font-size:12.5px;display:none;
-    box-shadow:0 6px 22px rgba(0,0,0,.35);
-  }
-  .tip:focus-within .bubble, .tip:hover .bubble{display:block}
-  .tip .bubble ul{margin:6px 0 0 18px;padding:0}
-  .tip .bubble li{margin:2px 0}
 </style>
 </head>
 <body>
 <header>
   <div class="brand">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path d="M5 12c3-6 11-6 14 0" stroke="#53e0a4" stroke-width="2" stroke-linecap="round"/>
-      <path d="M5 12c3 6 11 6 14 0" stroke="#4da3ff" stroke-width="2" stroke-linecap="round"/>
-      <circle cx="7" cy="12" r="1.5" fill="#53e0a4"/><circle cx="12" cy="12" r="1.5" fill="#4da3ff"/><circle cx="17" cy="12" r="1.5" fill="#53e0a4"/>
+      <path d="M5 12c3-6 11-6 14 0" stroke="#55f0aa" stroke-width="2" stroke-linecap="round"/>
+      <path d="M5 12c3 6 11 6 14 0" stroke="#63b3ff" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="7" cy="12" r="1.5" fill="#55f0aa"/><circle cx="12" cy="12" r="1.5" fill="#63b3ff"/><circle cx="17" cy="12" r="1.5" fill="#55f0aa"/>
     </svg>
     <div>
-      <h1 id="bizName">Dunn Right Creations — Christmas Light Estimator</h1>
-      <div class="tag">DFW, TX • Per-foot pricing • 12&quot; bulb spacing</div>
+      <h1>Dunn Right Creations — Christmas Light Estimator</h1>
+      <div class="tag">DFW, TX • Per-foot pricing • 12&quot; spacing</div>
       <div class="slogan">✨ Shine Bright. Dunn Right. ✨</div>
     </div>
   </div>
@@ -108,370 +101,99 @@
 </header>
 
 <div class="wrap">
-
   <section class="card">
     <h2>🎄 Project Details</h2>
-    <div class="notice" style="margin-bottom:8px;">
-      Reminder this is just a estimate, attach photos of home so we can give you a more accurate price for your <b>home holiday lighting vision</b>. Estimates are not final and will be reviewed before proceeding with installation.
-    </div>
-    <p class="muted">Enter your measurements. Rough estimates are fine — we’ll confirm during the onsite visit.</p>
+    <div class="notice">⚠️ This is just an estimate — final pricing will be confirmed after an onsite review. Attach photos for accuracy!</div>
 
-    <!-- Moved inside: Already Have Lights? -->
     <h3>💡 Already Have Lights?</h3>
-    <div class="inline-switch" style="margin-top:-2px;margin-bottom:6px">
-      <input id="install_only" type="checkbox" aria-describedby="ratePreview">
-      <span>I already have lights and just need professional installation.</span>
-      <span class="tip" tabindex="0" aria-label="What qualifies for install-only?">
-        <span class="icon">i</span>
-        <span class="bubble" role="tooltip">
-          <b>Install-only eligibility</b>
-          <ul>
-            <li>C9/C7 LED or incandescent strands (standard E17/E12 bases)</li>
-            <li>All bulbs/sockets working and outdoor-rated extension cords</li>
-            <li>Enough length for your roofline/ridge or we can mix/match sections</li>
-            <li>Clips provided by us are included in the install price</li>
-            <li>We install, secure, and remove after the season</li>
-          </ul>
-          If lights are damaged/incompatible, we’ll quote pro-grade materials at our regular package rates.
-        </span>
-      </span>
-    </div>
-    <div class="rate-preview" id="ratePreview"></div>
-    <div class="tiny-note" style="margin-bottom:10px">
-      When checked: Roofline <b>$3.00/ft</b>, Steep/Ridge/2-story <b>$3.50/ft</b>. Pricing applies to <b>customer-provided lights</b>.
-    </div>
+    <label><input type="checkbox" id="install_only"> I already have lights and only need installation</label>
+    <p class="muted">Roofline $3.00/ft • Steep or 2-story $3.50/ft</p>
 
     <h3>Contact <span class="req-star">*</span></h3>
-    <div class="grid">
-      <div class="row">
-        <div><label>Name</label><input id="name" placeholder="Jane Doe" required></div>
-        <div><label>Phone</label><input id="phone" placeholder="(682) 300-6825" required></div>
-      </div>
-      <div class="row">
-        <div><label>Email</label><input id="email" type="email" placeholder="dunnrightcreations1@gmail.com" required></div>
-        <div><label>ZIP (DFW area)</label><input id="zip" placeholder="76063" required></div>
-      </div>
-      <div><label>Address (optional)</label><input id="address" placeholder="123 Main St, DFW, TX"></div>
+    <div class="row">
+      <div><label>Name</label><input id="name" required></div>
+      <div><label>Phone</label><input id="phone" required></div>
     </div>
+    <div class="row">
+      <div><label>Email</label><input id="email" required></div>
+      <div><label>ZIP</label><input id="zip" required></div>
+    </div>
+    <label>Address (optional)</label><input id="address">
 
     <h3>Photos of Your Home <span class="req-star">*</span></h3>
-    <p class="muted">Add front of house and any areas you want lit. (Photos preview here. When the email opens, please attach the same photos.)</p>
-    <input id="photos" type="file" accept="image/*" multiple required>
-    <div id="photoThumbs" class="thumbs"></div>
+    <input id="photos" type="file" multiple accept="image/*">
+    <div id="photoThumbs"></div>
 
-    <h3>Describe what you would like us to light up for you? <span class="req-star">*</span></h3>
-    <textarea id="description" placeholder="Example: Roofline and upper ridge, 3 windows, 2 trees (trunks + canopy), driveway stakes, 2 wreaths by the entry…" required></textarea>
+    <h3>Describe what you’d like lit up <span class="req-star">*</span></h3>
+    <textarea id="description" placeholder="Example: roofline, trees, walkway, wreaths, bushes..." required></textarea>
 
-    <h3>Linear Footage (Optional)</h3>
-    <div class="grid">
-      <div class="row">
-        <div><label>Roofline (eaves) — ft</label><input id="roof_ft" type="number" min="0" value="0"></div>
-        <div><label>Steep / Ridge / 2-story — ft</label><input id="ridge_ft" type="number" min="0" value="0"></div>
-      </div>
-      <div class="row">
-        <div><label>Windows/doors outline — ft</label><input id="windows_ft" type="number" min="0" value="0"></div>
-        <div><label>Walkway/driveway — ft</label><input id="walk_ft" type="number" min="0" value="0"></div>
-      </div>
-      <div class="row">
-        <div><label>Ground stake line — ft</label><input id="stakes_ft" type="number" min="0" value="0"></div>
-      </div>
+    <h3>Linear Footage (optional)</h3>
+    <div class="row">
+      <div><label>Roofline (ft)</label><input id="roof_ft" type="number" value="0"></div>
+      <div><label>Ridge / 2-story (ft)</label><input id="ridge_ft" type="number" value="0"></div>
     </div>
-
-    <h3>Trees & Greenery</h3>
-    <div class="grid">
-      <div class="row">
-        <div><label>Tree trunk wrap — ft</label><input id="trunk_ft" type="number" min="0" value="0"></div>
-        <div><label>Bushes/Shrubs — qty</label><input id="bush_qty" type="number" min="0" value="0"><div class="muted">Tip: Count one per small bush or section of greenery.</div></div>
-      </div>
-      <div class="row">
-        <div><label>Wreaths — qty (36&quot; pre-lit)</label><input id="wreath_qty" type="number" min="0" value="0"></div>
-        <div><label>&nbsp;</label><div class="muted">36&quot; wreath price: $100/ea.</div></div>
-      </div>
-    </div>
-
-    <h3>Options</h3>
-    <div class="grid">
-      <div class="row">
-        <div class="switch"><input id="include_timer" type="checkbox" checked> <label for="include_timer">Include outdoor smart timer</label></div>
-      </div>
-      <div class="row">
-        <div><label>Discount code (optional)</label><input id="discount_code" placeholder="e.g., NEIGHBOR10"></div>
-        <div><label>Preferred install week</label>
-          <select id="install_week">
-            <option>This week</option><option>Next week</option><option>Early November</option>
-            <option>Mid November</option><option>Late November</option><option>Early December</option>
-          </select>
-        </div>
-      </div>
-    </div>
-
-    <details>
-      <summary>Measurement help & spacing</summary>
-      <p class="muted">We price by the foot with <b>12&quot; bulb spacing</b> (C9). That’s roughly one bulb per foot on straight runs. For trees and bushes we estimate by coverage. We’ll confirm exact counts on site.</p>
-    </details>
   </section>
 
   <aside class="card right-sticky">
-    <h2>🎁 Your Instant Estimate</h2>
-    <div class="kv" id="bizInfo"></div>
-    <div class="notice" style="margin:10px 0 0 0;">
-      Reminder this is just a estimate, attach photos of home so we can give you a more accurate price for your <b>home holiday lighting vision</b>. Estimates are not final and will be reviewed before proceeding with installation.
-    </div>
-    <div id="lines" class="grid" style="margin-top:10px"></div>
-
-    <div class="divider"></div>
-    <div class="grid">
-      <div class="line"><span>Subtotal</span><b id="subtotal">$0.00</b></div>
-      <div class="line"><span>New customer discount</span><b id="newdisc">-$0.00</b></div>
-      <div class="line"><span>Promo discount</span><b id="promodisc">-$0.00</b></div>
-      <div class="line" style="border-bottom:none"><span class="total">Final Estimated Total</span><span class="total" id="grand">$0.00</span></div>
-    </div>
-
-    <div class="grid" style="margin-top:12px">
-      <button class="btn btn-primary" id="requestBtn">Request This Estimate</button>
-      <button class="btn btn-outline" id="pdfBtn">Save/Print PDF</button>
-      <button class="btn btn-success" id="shareBtn">Copy Shareable Link</button>
-    </div>
-    <p class="footer-note">
-      This is a ballpark estimate. Final pricing is confirmed after on-site measurement. Installation includes professional grade lights, install, maintenance, removal, and storage options.
-      <br><br>
-      Reminder this is just a estimate, attach photos of home so we can give you a more accurate price for your <b>home holiday lighting vision</b>. Estimates are not final and will be reviewed before proceeding with installation.
-    </p>
-    <div class="copyright">
-      ✨ <span style="color:var(--gold)">Shine Bright. Dunn Right.</span> ✨<br>
-      © <span id="year"></span> Dunn Right Creations • DFW, TX
-      <div class="tiny">Phone: (682) 300-6825 • Email: dunnrightcreations1@gmail.com</div>
+    <h2>🎁 Estimate Summary</h2>
+    <p>Subtotal: <b id="subtotal">$0.00</b><br>New Customer Discount: <b id="newdisc">$0.00</b><br>Promo Discount: <b id="promodisc">$0.00</b></p>
+    <h3>Total</h3><h1 id="grand" style="color:var(--gold)">$0.00</h1>
+    <button class="btn btn-primary" id="requestBtn">Request Estimate</button>
+    <div class="notice" style="margin-top:12px">
+      ✳️ This is a rough estimate. Final pricing is verified once we confirm footage, layout, and materials onsite.
     </div>
   </aside>
 </div>
 
 <script>
-const suggested = {
-  business: {
-    name: "Dunn Right Creations",
-    phone: "(682) 300-6825",
-    email: "dunnrightcreations1@gmail.com",
-    area: "DFW, TX"
-  },
-  pricing: {
-    roof_ft: 5.50, ridge_ft: 6.50, windows_ft: 5.00, walk_ft: 4.00,
-    stakes_ft: 4.00, trunk_ft: 3.75, bush_each: 25.00, wreath_qty: 100.00, timer: 20.00
-  },
-  controls: {
-    new_cust_pct: 5,
-    promo_key: "NEIGHBOR10", promo_pct: 10
-  },
-  installOnlyRates: { roof_ft: 3.00, ridge_ft: 3.50 } // install-only overrides
-};
-
-const $ = (id)=>document.getElementById(id);
-const money = (v)=>v.toLocaleString(undefined,{style:"currency",currency:"USD"});
-const getNum = (el)=> Math.max(0, parseFloat(el.value||0));
-
-function loadConfig(){
-  const cfg = structuredClone(suggested);
-  $("bizName").textContent = `${cfg.business.name} — Christmas Light Estimator`;
-  $("bizInfo").innerHTML = `<div><b>${cfg.business.name}</b><br><span class="muted">${cfg.business.area}</span></div><div class="muted" style="text-align:right">${cfg.business.phone}<br>${cfg.business.email}</div>`;
-  window.currentConfig = cfg;
-  updateRatePreview(); // show default rates on load
-  recalc();
-}
-
-function serializeInputs(){
-  const data = {
-    contact: {
-      name: $("name").value.trim(),
-      phone: $("phone").value.trim(),
-      email: $("email").value.trim(),
-      zip: $("zip").value.trim(),
-      address: $("address").value.trim()
-    },
-    measures: {
-      roof_ft: getNum($("roof_ft")), ridge_ft: getNum($("ridge_ft")),
-      windows_ft: getNum($("windows_ft")), walk_ft: getNum($("walk_ft")),
-      stakes_ft: getNum($("stakes_ft")), trunk_ft: getNum($("trunk_ft")),
-      bush_qty: getNum($("bush_qty")), wreath_qty: getNum($("wreath_qty")),
-      include_timer: $("include_timer").checked
-    },
-    options:{
-      discount_code: $("discount_code").value.trim(),
-      install_week: $("install_week").value,
-      install_only: $("install_only").checked,
-      description: $("description").value.trim()
-    }
-  };
-  return data;
-}
-
-function compute(data, cfg){
-  const p = cfg.pricing;
-  const items = [];
-
-  // apply install-only rates for roof & ridge if toggled
-  const roofRate = data.options.install_only ? (cfg.installOnlyRates.roof_ft || p.roof_ft) : p.roof_ft;
-  const ridgeRate = data.options.install_only ? (cfg.installOnlyRates.ridge_ft || p.ridge_ft) : p.ridge_ft;
-
-  const add = (label, qty, unit, rate, note)=>{ if(qty>0){ items.push({label, qty, unit, rate, total: qty*rate, note}); } };
-  add("Roofline", data.measures.roof_ft, "ft", roofRate, data.options.install_only ? "install-only rate" : "");
-  add("Steep/Ridge/2-story", data.measures.ridge_ft, "ft", ridgeRate, data.options.install_only ? "install-only rate" : "");
-  add("Windows/Doors outline", data.measures.windows_ft, "ft", p.windows_ft, "");
-  add("Walkway/Driveway", data.measures.walk_ft, "ft", p.walk_ft, "");
-  add("Ground stakes", data.measures.stakes_ft, "ft", p.stakes_ft, "");
-  add("Tree trunk wrap", data.measures.trunk_ft, "ft", p.trunk_ft, "");
-  add("Bushes/Shrubs", data.measures.bush_qty, "ea", p.bush_each, "");
-  add("Wreaths (36\" pre-lit)", data.measures.wreath_qty, "ea", p.wreath_qty, "");
-  if(data.measures.include_timer) add("Outdoor smart timer", 1, "ea", p.timer, "");
-
-  const subtotal = items.reduce((s,x)=>s+x.total,0);
-  const newDisc = subtotal * (cfg.controls.new_cust_pct/100);
-  let promoDisc = 0;
-  if(data.options.discount_code && data.options.discount_code.toUpperCase() === String(cfg.controls.promo_key||"").toUpperCase()){
-    promoDisc = subtotal * (cfg.controls.promo_pct/100);
-  }
-  const grand = Math.max(0, subtotal - newDisc - promoDisc);
-  return {items, subtotal, newDisc, promoDisc, grand};
-}
-
-function renderLines(items){
-  const container = $("lines");
-  container.innerHTML = "";
-  if(items.length===0){
-    container.innerHTML = '<div class="alert">No line items yet. Enter footage to see pricing.</div>'; return;
-  }
-  items.forEach(x=>{
-    const div = document.createElement("div");
-    div.className = "line";
-    const badge = x.note ? `<span class="badge">${x.note}</span>` : "";
-    div.innerHTML = `<span><b>${x.label}</b> ${badge} <small class="muted">(${x.qty} ${x.unit} × ${money(x.rate)})</small></span><span>${money(x.total)}</span>`;
-    container.appendChild(div);
-  });
-}
-
+const pricing={roof:5.5,ridge:6.5,install_roof:3,install_ridge:3.5,newDisc:5,promoKey:"NEIGHBOR10",promo:10};
+function money(v){return v.toLocaleString(undefined,{style:"currency",currency:"USD"})}
 function recalc(){
-  const cfg = window.currentConfig;
-  const data = serializeInputs();
-  const res = compute(data, cfg);
-  renderLines(res.items);
-  $("subtotal").textContent = money(res.subtotal);
-  $("newdisc").textContent = "-" + money(res.newDisc);
-  $("promodisc").textContent = "-" + money(res.promoDisc);
-  $("grand").textContent = money(res.grand);
-  window._lastEstimate = {cfg, data, res};
+  const roof=+document.getElementById('roof_ft').value||0;
+  const ridge=+document.getElementById('ridge_ft').value||0;
+  const install=document.getElementById('install_only').checked;
+  const subtotal=(install?(roof*pricing.install_roof+ridge*pricing.install_ridge):(roof*pricing.roof+ridge*pricing.ridge));
+  const newDisc=subtotal*(pricing.newDisc/100);
+  const grand=subtotal-newDisc;
+  document.getElementById('subtotal').textContent=money(subtotal);
+  document.getElementById('newdisc').textContent="-"+money(newDisc);
+  document.getElementById('promodisc').textContent="-$0.00";
+  document.getElementById('grand').textContent=money(grand);
 }
+document.querySelectorAll('input').forEach(e=>e.addEventListener('input',recalc));
+recalc();
 
-function attachListeners(){
-  document.querySelectorAll("input,select,textarea").forEach(el=>{
-    el.addEventListener("input", recalc);
-    el.addEventListener("change", recalc);
-  });
-  $("photos").addEventListener("change", handlePhotos);
-  $("requestBtn").addEventListener("click", createEmail);
-  $("pdfBtn").addEventListener("click", ()=>window.print());
-  $("shareBtn").addEventListener("click", copyShareLink);
+document.getElementById('requestBtn').onclick=()=>{
+  const n=document.getElementById('name').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const zip=document.getElementById('zip').value.trim();
+  const addr=document.getElementById('address').value.trim();
+  const d=document.getElementById('description').value.trim();
+  const g=document.getElementById('grand').textContent;
 
-  // install-only toggle: update prices + preview instantly
-  $("install_only").addEventListener("change", ()=>{
-    updateRatePreview();
-    recalc();
-  });
-}
+  const body=
+`Hello Dunn Right Creations,
 
-function updateRatePreview(){
-  const cfg = window.currentConfig;
-  const el = $("ratePreview");
-  const installOnly = $("install_only").checked;
-  if(installOnly){
-    el.textContent = `Using $${(cfg.installOnlyRates.roof_ft).toFixed(2)}/ft (roofline) & $${(cfg.installOnlyRates.ridge_ft).toFixed(2)}/ft (steep/2-story)`;
-  }else{
-    el.textContent = `Using $${(cfg.pricing.roof_ft).toFixed(2)}/ft (roofline) & $${(cfg.pricing.ridge_ft).toFixed(2)}/ft (steep/2-story)`;
-  }
-}
+I'd like to request an installation estimate.
 
-function handlePhotos(evt){
-  const files = Array.from(evt.target.files||[]).slice(0,12);
-  const thumbs = $("photoThumbs"); thumbs.innerHTML = "";
-  files.forEach(file=>{
-    const img = document.createElement("img"); img.alt = file.name; thumbs.appendChild(img);
-    const reader = new FileReader(); reader.onload = e => { img.src = e.target.result; }; reader.readAsDataURL(file);
-  });
-  window._photos = files.map(f=>f.name);
-}
+Name: ${n}
+Phone: ${phone}
+Email: ${email}
+ZIP: ${zip}
+Address: ${addr}
 
-function createEmail(){
-  const state = window._lastEstimate || {};
-  const {cfg, data, res} = state; if(!res) return;
+Project details:
+${d}
 
-  const to = encodeURIComponent(cfg.business.email || "dunnrightcreations1@gmail.com");
-  const subject = encodeURIComponent(`Christmas Lights Estimate — ${data.contact.name||"New Lead"}`);
+Estimated total: ${g}
 
-  const lines = res.items.map(x=>`${x.label}${x.note ? " ("+x.note+")" : ""}: ${x.qty} ${x.unit} × ${money(x.rate)} = ${money(x.total)}`).join("\n");
-  const photoList = (window._photos && window._photos.length)
-      ? `\n\nAttached Photos:\n- ${window._photos.join("\n- ")}`
-      : `\n\nAttached Photos: (please attach your photos before sending)`;
-  const desc = data.options.description
-      ? `\n\nProject Description:\n${data.options.description}`
-      : "";
-  const installOnlyNote = data.options.install_only
-      ? `\n\nInstall-Only Pricing Selected:\nRoofline $${suggested.installOnlyRates.roof_ft.toFixed(2)}/ft, Steep/Ridge/2-story $${suggested.installOnlyRates.ridge_ft.toFixed(2)}/ft`
-      : "";
+This is a preliminary estimate — final cost will be confirmed after the onsite visit.
 
-  const summary =
-`Estimate Summary:
-${lines}
+Thank you!`;
 
-Subtotal: ${money(res.subtotal)}
-New Customer Discount (${suggested.controls.new_cust_pct}%): -${money(res.newDisc)}
-Promo Discount: -${money(res.promoDisc)}
-Final Estimated Total: ${money(res.grand)}`;
-
-  const contactBlock =
-`Name: ${data.contact.name}
-Phone: ${data.contact.phone || "(682) 300-6825"}
-Email: ${data.contact.email || "dunnrightcreations1@gmail.com"}
-ZIP: ${data.contact.zip}
-Address: ${data.contact.address}`;
-
-  const body =
-`Hello ${suggested.business.name},
-
-I'd like to schedule my Christmas light installation for the week of ${data.options.install_week}.
-
-${contactBlock}${desc}${installOnlyNote}
-
-${summary}
-
-Promo Code: ${data.options.discount_code || "—"}${photoList}
-
-This is a ballpark estimate. You'll review details and confirm final pricing before scheduling installation.
-
-—
-Dunn Right Creations
-DFW, TX • (682) 300-6825 • dunnrightcreations1@gmail.com
-✨ Shine Bright. Dunn Right. ✨`;
-
-  window.location.href = `mailto:${to}?subject=${subject}&body=${encodeURIComponent(body)}`;
-}
-
-function copyShareLink(){
-  const url = new URL(window.location.href);
-  const cfg = window.currentConfig, p = url.searchParams;
-  p.set("p_roof", cfg.pricing.roof_ft); p.set("p_ridge", cfg.pricing.ridge_ft);
-  p.set("p_windows", cfg.pricing.windows_ft); p.set("p_walk", cfg.pricing.walk_ft);
-  p.set("p_stakes", cfg.pricing.stakes_ft); p.set("p_trunk", cfg.pricing.trunk_ft);
-  p.set("p_bush", cfg.pricing.bush_each); p.set("p_wreath", cfg.pricing.wreath_qty);
-  p.set("p_timer", cfg.pricing.timer);
-  p.set("new_pct", cfg.controls.new_cust_pct);
-  p.set("promo_key", cfg.controls.promo_key); p.set("promo_pct", cfg.controls.promo_pct);
-  p.set("biz_name", cfg.business.name); p.set("biz_phone", cfg.business.phone);
-  p.set("biz_email", cfg.business.email); p.set("biz_area", cfg.business.area);
-  navigator.clipboard.writeText(url.toString()).then(()=>alert("Link copied. Paste it into your Facebook Page button or a post."), ()=>prompt("Copy this link:", url.toString()));
-}
-
-(function init(){
-  document.getElementById("year").textContent = new Date().getFullYear();
-  loadConfig(); attachListeners();
-  document.querySelectorAll("input, select, textarea").forEach(el=>el.addEventListener("keyup", recalc));
-})();
+  window.location.href=`mailto:dunnrightcreations1@gmail.com?subject=Christmas Light Estimate&body=${encodeURIComponent(body)}`;
+};
 </script>
 </body>
 </html>
